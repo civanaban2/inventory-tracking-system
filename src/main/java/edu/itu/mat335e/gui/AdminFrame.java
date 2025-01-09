@@ -195,9 +195,31 @@ public class AdminFrame extends Frame {
     }
 
     public void addBtnListener(JButton button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        button.addActionListener(e -> {
+            String name = txtName.getText();
+            String id = txtId.getText();
+            double price = Double.parseDouble(txtPrice.getText());
+            int quantity = Integer.parseInt(txtQuantity.getText());
+            String supplier = txtSupplier.getText();
+            String expireDate = txtExpireDate.getText();
+            String category = txtCategory.getText();
+            List<Product> products = tableManager.getProductDAO().getAllItems();
+            boolean idExists = products.stream().anyMatch(product -> product.getId().equals(id));
+
+            if (idExists) {
+                JOptionPane.showMessageDialog(null, "This ID already exists. Please enter another ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Product product = new Product(name, id, price, quantity, supplier, expireDate, category);
+                tableManager.getProductDAO().addItem(product);
+                tableManager.loadTable(applyConfigurations());
+            }
+        });
+    }
+
+    public void updateBtnListener(JButton button) {
+        button.addActionListener(e -> {
+            int selectedRow = tableManager.getProductTable().getSelectedRow();
+            if (selectedRow != -1) {
                 String name = txtName.getText();
                 String id = txtId.getText();
                 double price = Double.parseDouble(txtPrice.getText());
@@ -205,104 +227,57 @@ public class AdminFrame extends Frame {
                 String supplier = txtSupplier.getText();
                 String expireDate = txtExpireDate.getText();
                 String category = txtCategory.getText();
-                List<Product> products = tableManager.getProductDAO().getAllItems();
-                boolean idExists = products.stream().anyMatch(product -> product.getId().equals(id));
 
-                if (idExists) {
-                    JOptionPane.showMessageDialog(null, "This ID already exists. Please enter another ID.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    Product product = new Product(name, id, price, quantity, supplier, expireDate, category);
-                    tableManager.getProductDAO().addItem(product);
-					tableManager.loadTable(applyConfigurations());                
-				}
-            }
-        });
-    }
-
-    public void updateBtnListener(JButton button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = tableManager.getProductTable().getSelectedRow();
-                if (selectedRow != -1) {
-                    String name = txtName.getText();
-                    String id = txtId.getText();
-                    double price = Double.parseDouble(txtPrice.getText());
-                    int quantity = Integer.parseInt(txtQuantity.getText());
-                    String supplier = txtSupplier.getText();
-                    String expireDate = txtExpireDate.getText();
-                    String category = txtCategory.getText();
-
-                    Product product = new Product(name, id, price, quantity, supplier, expireDate, category);
-                    tableManager.getProductDAO().updateItem(product);
-					tableManager.loadTable(applyConfigurations());
-				}
+                Product product = new Product(name, id, price, quantity, supplier, expireDate, category);
+                tableManager.getProductDAO().updateItem(product);
+                tableManager.loadTable(applyConfigurations());
             }
         });
     }
 
     public void deleteBtnListener(JButton button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = tableManager.getProductTable().getSelectedRow();
-                if (selectedRow != -1) {
-                    String id = tableManager.getTableModel().getValueAt(selectedRow, 1).toString();
-                    tableManager.getProductDAO().removeItem(id);
-                    tableManager.loadTable(applyConfigurations());                
-				}
+        button.addActionListener(e -> {
+            int selectedRow = tableManager.getProductTable().getSelectedRow();
+            if (selectedRow != -1) {
+                String id = tableManager.getTableModel().getValueAt(selectedRow, 1).toString();
+                tableManager.getProductDAO().removeItem(id);
+                tableManager.loadTable(applyConfigurations());
             }
         });
     }
 
     public void reportBtnListener(JButton button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ReportFrame reportFrame = new ReportFrame();
-                reportFrame.setVisible(true);
-            }
+        button.addActionListener(e -> {
+            ReportFrame reportFrame = new ReportFrame();
+            reportFrame.setVisible(true);
         });
     }
 
     public void clearBtnListener(JButton button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtName.setText("Name");
-                txtId.setText("ID");
-                txtPrice.setText("Price");
-                txtQuantity.setText("Quantity");
-                txtSupplier.setText("Supplier");
-                txtExpireDate.setText("Expire Date");
-                txtCategory.setText("Category");
-                txtName.setForeground(Color.GRAY);
-                txtId.setForeground(Color.GRAY);
-                txtPrice.setForeground(Color.GRAY);
-                txtQuantity.setForeground(Color.GRAY);
-                txtSupplier.setForeground(Color.GRAY);
-                txtExpireDate.setForeground(Color.GRAY);
-                txtCategory.setForeground(Color.GRAY);
-            }
+        button.addActionListener(e -> {
+            txtName.setText("Name");
+            txtId.setText("ID");
+            txtPrice.setText("Price");
+            txtQuantity.setText("Quantity");
+            txtSupplier.setText("Supplier");
+            txtExpireDate.setText("Expire Date");
+            txtCategory.setText("Category");
+            txtName.setForeground(Color.GRAY);
+            txtId.setForeground(Color.GRAY);
+            txtPrice.setForeground(Color.GRAY);
+            txtQuantity.setForeground(Color.GRAY);
+            txtSupplier.setForeground(Color.GRAY);
+            txtExpireDate.setForeground(Color.GRAY);
+            txtCategory.setForeground(Color.GRAY);
         });
     }
 
     public void categoryBtnListener(JComboBox<String> button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tableManager.loadTable(applyConfigurations());
-            }
-        });
+        button.addActionListener(e -> tableManager.loadTable(applyConfigurations()));
     }
 
     public void sortBtnListener(JComboBox<String> button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tableManager.loadTable(applyConfigurations());
-            }
-        });
+        button.addActionListener(e -> tableManager.loadTable(applyConfigurations()));
     }
 
 	public List<Product> applyConfigurations() {
@@ -311,7 +286,6 @@ public class AdminFrame extends Frame {
 
         if (category == null){
             btnCategory.setSelectedItem("All");
-			category = "All";
             products = tableManager.getProductDAO().getAllItems();
 		}
 		else if (category.equals("All")) {

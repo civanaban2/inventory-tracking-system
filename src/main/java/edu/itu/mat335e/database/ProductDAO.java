@@ -21,14 +21,6 @@ public class ProductDAO {
         }
     }
 
-    public void closeConnection() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void createTable() {
         try {
             stmt = connection.prepareStatement( "CREATE TABLE IF NOT EXISTS products " +
