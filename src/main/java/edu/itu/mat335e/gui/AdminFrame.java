@@ -60,10 +60,11 @@ public class AdminFrame extends Frame {
         btnReport = new JButton("Report");
         btnClear = new JButton("Clear");
         btnCategory = new JComboBox<>();
-        btnSort = new JComboBox<>();
-        initializeCategoryList();
-        initializeSortList();
-        tableManager.loadProducts();
+        btnSort = new JComboBox<>(new String[]{
+			"Name", "ID", "Price", "Quantity", "Supplier", "Expire Date", "Category"
+		});
+		updateCategoryList();
+        tableManager.loadTable(applyConfigurations());
     }
 
     @Override
@@ -104,8 +105,8 @@ public class AdminFrame extends Frame {
         tableManager.getScrollPane().setMinimumSize(new Dimension(750, 250));
         tableManager.getScrollPane().setMaximumSize(new Dimension(750, 250));
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-        listPanel.setMinimumSize(new Dimension(800, 350));
-        listPanel.setMaximumSize(new Dimension(800, 350));
+        listPanel.setMinimumSize(new Dimension(800, 400));
+        listPanel.setMaximumSize(new Dimension(800, 400));
     }
 
     @Override
@@ -183,19 +184,13 @@ public class AdminFrame extends Frame {
         });
     }
 
-    public void initializeCategoryList() {
+    public void updateCategoryList() {
         btnCategory.removeAllItems();
         btnCategory.addItem("All");
         List<String> uniqueCategories = tableManager.getProductDAO().getUniqueCategories();
         for (String category : uniqueCategories) {
             btnCategory.addItem(category);
         }
-    }
-
-    public void initializeSortList() {
-        btnSort = new JComboBox<>(new String[]{
-                "Name", "ID", "Price", "Quantity", "Supplier", "Expire Date", "Category"
-        });
     }
 
     public void addBtnListener(JButton button) {
@@ -209,7 +204,6 @@ public class AdminFrame extends Frame {
                 String supplier = txtSupplier.getText();
                 String expireDate = txtExpireDate.getText();
                 String category = txtCategory.getText();
-
                 List<Product> products = tableManager.getProductDAO().getAllItems();
                 boolean idExists = products.stream().anyMatch(product -> product.getId().equals(id));
 
@@ -218,9 +212,8 @@ public class AdminFrame extends Frame {
                 } else {
                     Product product = new Product(name, id, price, quantity, supplier, expireDate, category);
                     tableManager.getProductDAO().addItem(product);
-                    tableManager.loadProducts();
-                    initializeCategoryList();
-                }
+					tableManager.loadTable(applyConfigurations());                
+				}
             }
         });
     }
@@ -241,9 +234,8 @@ public class AdminFrame extends Frame {
 
                     Product product = new Product(name, id, price, quantity, supplier, expireDate, category);
                     tableManager.getProductDAO().updateItem(product);
-                    tableManager.loadProducts();
-                    initializeCategoryList();
-                }
+					tableManager.loadTable(applyConfigurations());
+				}
             }
         });
     }
@@ -256,9 +248,8 @@ public class AdminFrame extends Frame {
                 if (selectedRow != -1) {
                     String id = tableManager.getTableModel().getValueAt(selectedRow, 1).toString();
                     tableManager.getProductDAO().removeItem(id);
-                    tableManager.loadProducts();
-                    initializeCategoryList();
-                }
+                    tableManager.loadTable(applyConfigurations());                
+				}
             }
         });
     }
@@ -299,26 +290,7 @@ public class AdminFrame extends Frame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Object selectedItem = btnCategory.getSelectedItem();
-                if (selectedItem != null) {
-                    String category = selectedItem.toString();
-                    if (category.equals("All")) {
-                        tableManager.loadProducts();
-                    }
-                    else {
-                        List<Product> products = tableManager.getProductDAO().getItemsByCategory(category);
-                        tableManager.getTableModel().setRowCount(0);
-                        for (Product product : products) {
-                            Object[] row = {product.getName(), product.getId(), product.getPrice(),
-                                    product.getQuantity(), product.getSupplier(),
-                                    product.getExpireDate(), product.getCategory()};
-                            tableManager.getTableModel().addRow(row);
-                        }
-                    }
-                }
-                else {
-                    tableManager.loadProducts();
-                }
+                tableManager.loadTable(applyConfigurations());
             }
         });
     }
@@ -327,41 +299,54 @@ public class AdminFrame extends Frame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String sortCriteria = btnSort.getSelectedItem().toString();
-                List<Product> products = tableManager.getProductDAO().getAllItems();
-
-                switch (sortCriteria) {
-                    case "Name":
-                        products.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
-                        break;
-                    case "ID":
-                        products.sort((p1, p2) -> p1.getId().compareTo(p2.getId()));
-                        break;
-                    case "Price":
-                        products.sort((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
-                        break;
-                    case "Quantity":
-                        products.sort((p1, p2) -> p1.getQuantity() - p2.getQuantity());
-                        break;
-                    case "Supplier":
-                        products.sort((p1, p2) -> p1.getSupplier().compareTo(p2.getSupplier()));
-                        break;
-                    case "Expire Date":
-                        products.sort((p1, p2) -> p1.getExpireDate().compareTo(p2.getExpireDate()));
-                        break;
-                    case "Category":
-                        products.sort((p1, p2) -> p1.getCategory().compareTo(p2.getCategory()));
-                        break;
-                }
-
-                tableManager.getTableModel().setRowCount(0);
-                for (Product product : products) {
-                    Object[] row = {product.getName(), product.getId(), product.getPrice(),
-                            product.getQuantity(), product.getSupplier(),
-                            product.getExpireDate(), product.getCategory()};
-                    tableManager.getTableModel().addRow(row);
-                }
+                tableManager.loadTable(applyConfigurations());
             }
         });
     }
+
+	public List<Product> applyConfigurations() {
+		String sortCriteria = btnSort.getSelectedItem().toString();
+		String category = btnCategory.getSelectedItem().toString();
+		List<Product> products;
+
+        if (category == null){
+            btnCategory.setSelectedItem("All");
+			category = "All";
+            products = tableManager.getProductDAO().getAllItems();
+		}
+		else if (category.equals("All")) {
+            products = tableManager.getProductDAO().getAllItems();
+		}
+		else {
+			products = tableManager.getProductDAO().getItemsByCategory(category);
+		}
+
+		switch (sortCriteria) {
+			case "Name":
+				products.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
+				break;
+			case "ID":
+				products.sort((p1, p2) -> p1.getId().compareTo(p2.getId()));
+				break;
+			case "Price":
+				products.sort((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
+				break;
+			case "Quantity":
+				products.sort((p1, p2) -> p1.getQuantity() - p2.getQuantity());
+				break;
+			case "Supplier":
+				products.sort((p1, p2) -> p1.getSupplier().compareTo(p2.getSupplier()));
+				break;
+			case "Expire Date":
+				products.sort((p1, p2) -> p1.getExpireDate().compareTo(p2.getExpireDate()));
+				break;
+			case "Category":
+				products.sort((p1, p2) -> p1.getCategory().compareTo(p2.getCategory()));
+				break;
+			default:
+				products.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
+				break;
+		}
+		return products;
+	}
 }

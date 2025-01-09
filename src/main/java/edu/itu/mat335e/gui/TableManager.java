@@ -1,6 +1,5 @@
 package edu.itu.mat335e.gui;
 
-import edu.itu.mat335e.database.DatabaseConnection;
 import edu.itu.mat335e.database.ProductDAO;
 import edu.itu.mat335e.model.Product;
 
