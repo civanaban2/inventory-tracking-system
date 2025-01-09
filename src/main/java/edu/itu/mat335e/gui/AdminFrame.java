@@ -195,7 +195,7 @@ public class AdminFrame extends Frame {
     }
 
     public void addBtnListener(JButton button) {
-        button.addActionListener(e -> {
+        button.addActionListener(_ -> {
             String name = txtName.getText();
             String id = txtId.getText();
             double price = Double.parseDouble(txtPrice.getText());
@@ -217,7 +217,7 @@ public class AdminFrame extends Frame {
     }
 
     public void updateBtnListener(JButton button) {
-        button.addActionListener(e -> {
+        button.addActionListener(_ -> {
             int selectedRow = tableManager.getProductTable().getSelectedRow();
             if (selectedRow != -1) {
                 String name = txtName.getText();
@@ -236,7 +236,7 @@ public class AdminFrame extends Frame {
     }
 
     public void deleteBtnListener(JButton button) {
-        button.addActionListener(e -> {
+        button.addActionListener(_ -> {
             int selectedRow = tableManager.getProductTable().getSelectedRow();
             if (selectedRow != -1) {
                 String id = tableManager.getTableModel().getValueAt(selectedRow, 1).toString();
@@ -247,14 +247,14 @@ public class AdminFrame extends Frame {
     }
 
     public void reportBtnListener(JButton button) {
-        button.addActionListener(e -> {
+        button.addActionListener(_ -> {
             ReportFrame reportFrame = new ReportFrame();
             reportFrame.setVisible(true);
         });
     }
 
     public void clearBtnListener(JButton button) {
-        button.addActionListener(e -> {
+        button.addActionListener(_ -> {
             txtName.setText("Name");
             txtId.setText("ID");
             txtPrice.setText("Price");
@@ -273,11 +273,11 @@ public class AdminFrame extends Frame {
     }
 
     public void categoryBtnListener(JComboBox<String> button) {
-        button.addActionListener(e -> tableManager.loadTable(applyConfigurations()));
+        button.addActionListener(_ -> tableManager.loadTable(applyConfigurations()));
     }
 
     public void sortBtnListener(JComboBox<String> button) {
-        button.addActionListener(e -> tableManager.loadTable(applyConfigurations()));
+        button.addActionListener(_ -> tableManager.loadTable(applyConfigurations()));
     }
 
 	public List<Product> applyConfigurations() {

@@ -52,8 +52,8 @@ public class ReportFrame extends Frame{
 
     @Override
     public void addListeners() {
-        filterComboBox.addActionListener(e -> applyConfigurations());
-        sortComboBox.addActionListener(e -> applyConfigurations());
+        filterComboBox.addActionListener(_ -> applyConfigurations());
+        sortComboBox.addActionListener(_ -> applyConfigurations());
     }
 
     @Override
