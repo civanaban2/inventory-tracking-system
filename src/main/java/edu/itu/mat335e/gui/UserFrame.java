@@ -86,11 +86,11 @@ public class UserFrame extends Frame{
     }
 
     public void categoryBtnListener(JComboBox<String> button) {
-        button.addActionListener(e -> tableManager.loadTable(applyConfigurations()));
+        button.addActionListener(_ -> tableManager.loadTable(applyConfigurations()));
     }
 
     public void sortBtnListener(JComboBox<String> button) {
-        button.addActionListener(e -> tableManager.loadTable(applyConfigurations()));
+        button.addActionListener(_ -> tableManager.loadTable(applyConfigurations()));
     }
 
 	public List<Product> applyConfigurations() {
