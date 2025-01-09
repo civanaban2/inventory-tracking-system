@@ -4,8 +4,6 @@ import edu.itu.mat335e.model.Product;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,19 +52,8 @@ public class ReportFrame extends Frame{
 
     @Override
     public void addListeners() {
-        filterComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                applyConfigurations();
-            }
-        });
-
-        sortComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                applyConfigurations();
-            }
-        });
+        filterComboBox.addActionListener(e -> applyConfigurations());
+        sortComboBox.addActionListener(e -> applyConfigurations());
     }
 
     @Override
@@ -113,11 +100,6 @@ public class ReportFrame extends Frame{
             case null, default:
                 products.sort(Comparator.comparingInt(Product::getQuantity));
         }
-
         tableManager.loadTable(products);
-    }
-
-    public TableManager getTableManager() {
-        return tableManager;
     }
 }

@@ -4,8 +4,6 @@ import edu.itu.mat335e.model.Product;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class UserFrame extends Frame{
@@ -32,8 +30,8 @@ public class UserFrame extends Frame{
     @Override
     public void initialize() {
         listPanel = new JPanel();
-        btnCategory = new JComboBox<String>();
-        btnSort = new JComboBox<String>();
+        btnCategory = new JComboBox<>();
+        btnSort = new JComboBox<>();
         tableManager = new TableManager();
 		btnSort = new JComboBox<>(new String[]{
 			"Name", "ID", "Price", "Quantity", "Supplier", "Expire Date", "Category"
@@ -88,21 +86,11 @@ public class UserFrame extends Frame{
     }
 
     public void categoryBtnListener(JComboBox<String> button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tableManager.loadTable(applyConfigurations());
-            }
-        });
+        button.addActionListener(e -> tableManager.loadTable(applyConfigurations()));
     }
 
     public void sortBtnListener(JComboBox<String> button) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tableManager.loadTable(applyConfigurations());
-            }
-        });
+        button.addActionListener(e -> tableManager.loadTable(applyConfigurations()));
     }
 
 	public List<Product> applyConfigurations() {
@@ -111,7 +99,6 @@ public class UserFrame extends Frame{
 
         if (category == null){
             btnCategory.setSelectedItem("All");
-			category = "All";
             products = tableManager.getProductDAO().getAllItems();
 		}
 		else if (category.equals("All")) {

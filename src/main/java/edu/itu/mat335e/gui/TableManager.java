@@ -9,26 +9,14 @@ import java.util.List;
 
 public class TableManager {
     private DefaultTableModel tableModel;
-    private JTable productTable;
-    private JScrollPane scrollPane;
-    private ProductDAO productDAO;
-	private List<Product> products;
+    private final JTable productTable;
+    private final JScrollPane scrollPane;
+    private final ProductDAO productDAO;
 
     public TableManager() {
         productDAO = new ProductDAO();
         productTable = createTable();
         scrollPane = new JScrollPane(productTable);
-    }
-
-    public void loadProducts() {
-        tableModel.setRowCount(0);
-        products = productDAO.getAllItems();
-        for (Product product : products) {
-            Object[] row = {product.getName(), product.getId(), product.getPrice(),
-                    product.getQuantity(), product.getSupplier(),
-                    product.getExpireDate(), product.getCategory()};
-            tableModel.addRow(row);
-        }
     }
 
     public void loadTable(List<Product> products) {
