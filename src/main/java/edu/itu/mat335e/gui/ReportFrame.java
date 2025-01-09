@@ -78,7 +78,7 @@ public class ReportFrame extends Frame{
         add(listPanel, BorderLayout.CENTER);
     }
 
-    private void applyConfigurations() {
+    public void applyConfigurations() {
         int selectedThreshold = (Integer) filterComboBox.getSelectedItem();
         String sortCriteria = (String) sortComboBox.getSelectedItem();
 
