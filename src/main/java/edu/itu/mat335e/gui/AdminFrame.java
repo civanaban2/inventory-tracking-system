@@ -209,7 +209,7 @@ public class AdminFrame extends Frame {
                 boolean idExists = products.stream().anyMatch(product -> product.getId().equals(id));
 
                 if (idExists) {
-                    JOptionPane.showMessageDialog(null, "Bu ID zaten mevcut. Lütfen farklı bir ID girin.", "Hata", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "This ID already exists. Please enter another ID.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     Product product = new Product(name, id, price, quantity, supplier, expireDate, category);
                     tableManager.getProductDAO().addItem(product);
