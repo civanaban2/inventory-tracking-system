@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class ProductDAO {
-    public Connection connection;
-    public PreparedStatement stmt;
+    private Connection connection;
+    private PreparedStatement stmt;
 
     public ProductDAO() {
         connectToDatabase();

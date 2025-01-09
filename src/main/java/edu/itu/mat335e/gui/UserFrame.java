@@ -9,10 +9,11 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class UserFrame extends Frame{
-    JPanel listPanel;
-    JComboBox<String> btnCategory;
-    JComboBox<String> btnSort;
-    TableManager tableManager;
+    private JPanel listPanel;
+    private JComboBox<String> btnCategory;
+    private JComboBox<String> btnSort;
+    private TableManager tableManager;
+	private List<Product> products;
 
     public UserFrame() {
         super();
@@ -107,7 +108,6 @@ public class UserFrame extends Frame{
 	public List<Product> applyConfigurations() {
 		String sortCriteria = btnSort.getSelectedItem().toString();
 		String category = btnCategory.getSelectedItem().toString();
-		List<Product> products;
 
         if (category == null){
             btnCategory.setSelectedItem("All");

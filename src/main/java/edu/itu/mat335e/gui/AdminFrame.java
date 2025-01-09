@@ -26,6 +26,7 @@ public class AdminFrame extends Frame {
     private JComboBox<String> btnCategory;
     private JComboBox<String> btnSort;
     private TableManager tableManager;
+	private List<Product> products;
 
     public AdminFrame() {
         super();
@@ -307,7 +308,6 @@ public class AdminFrame extends Frame {
 	public List<Product> applyConfigurations() {
 		String sortCriteria = btnSort.getSelectedItem().toString();
 		String category = btnCategory.getSelectedItem().toString();
-		List<Product> products;
 
         if (category == null){
             btnCategory.setSelectedItem("All");

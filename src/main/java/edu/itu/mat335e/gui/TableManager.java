@@ -12,6 +12,7 @@ public class TableManager {
     private JTable productTable;
     private JScrollPane scrollPane;
     private ProductDAO productDAO;
+	private List<Product> products;
 
     public TableManager() {
         productDAO = new ProductDAO();
@@ -21,7 +22,7 @@ public class TableManager {
 
     public void loadProducts() {
         tableModel.setRowCount(0);
-        List<Product> products = productDAO.getAllItems();
+        products = productDAO.getAllItems();
         for (Product product : products) {
             Object[] row = {product.getName(), product.getId(), product.getPrice(),
                     product.getQuantity(), product.getSupplier(),
