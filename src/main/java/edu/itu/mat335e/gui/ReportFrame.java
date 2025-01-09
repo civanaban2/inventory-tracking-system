@@ -14,8 +14,9 @@ public class ReportFrame extends Frame{
     private JComboBox<Integer> filterComboBox;
     private JComboBox<String> sortComboBox;
     private TableManager tableManager;
-    public JPanel topPanel;
-    public JPanel listPanel;
+    private JPanel topPanel;
+    private JPanel listPanel;
+	private List<Product> products;
 
     public ReportFrame() {
         super();
@@ -94,26 +95,26 @@ public class ReportFrame extends Frame{
         int selectedThreshold = (Integer) filterComboBox.getSelectedItem();
         String sortCriteria = (String) sortComboBox.getSelectedItem();
 
-        List<Product> filteredProducts = tableManager.getProductDAO().getAllItems().stream()
-                .filter(product -> product.getQuantity() < selectedThreshold) // Eşik altı stoklar
+        products = tableManager.getProductDAO().getAllItems().stream()
+                .filter(product -> product.getQuantity() < selectedThreshold)
                 .collect(Collectors.toList());
 
         switch (sortCriteria) {
             case "Quantity Descending":
-                filteredProducts.sort((p1, p2) -> p2.getQuantity() - p1.getQuantity());
+                products.sort((p1, p2) -> p2.getQuantity() - p1.getQuantity());
                 break;
             case "Alphabetically Ascending":
-                filteredProducts.sort(Comparator.comparing(Product::getName));
+                products.sort(Comparator.comparing(Product::getName));
                 break;
             case "Alphabetically Descending":
-                filteredProducts.sort((p1, p2) -> p2.getName().compareTo(p1.getName()));
+                products.sort((p1, p2) -> p2.getName().compareTo(p1.getName()));
                 break;
             case "Quantity Ascending":
             case null, default:
-                filteredProducts.sort(Comparator.comparingInt(Product::getQuantity));
+                products.sort(Comparator.comparingInt(Product::getQuantity));
         }
 
-        tableManager.loadTable(filteredProducts);
+        tableManager.loadTable(products);
     }
 
     public TableManager getTableManager() {
