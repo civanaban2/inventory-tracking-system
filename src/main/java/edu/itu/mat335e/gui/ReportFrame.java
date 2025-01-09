@@ -1,10 +1,8 @@
 package edu.itu.mat335e.gui;
 
-import edu.itu.mat335e.database.ProductDAO;
 import edu.itu.mat335e.model.Product;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
