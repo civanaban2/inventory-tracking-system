@@ -115,7 +115,7 @@ public class LoginFrame extends Frame{
         getContentPane().setFocusable(true);
     }
 
-    private void loginAction() {
+    public void loginAction() {
         String username = txtUsername.getText();
         String password = new String(txtPassword.getPassword());
 
@@ -131,7 +131,7 @@ public class LoginFrame extends Frame{
         }
     }
 
-    private void openMainFrame(String role) {
+    public void openMainFrame(String role) {
         if (role.equals("root")) {
             AdminFrame rootFrame = new AdminFrame();
             rootFrame.setVisible(true);
